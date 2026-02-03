@@ -1,96 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500&family=Roboto:wght@400;500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
+/* Google Classroom Design System - Material Design 3 */
 @layer base {
   :root {
+    /* Google Blue Primary */
+    --primary: 217 89% 51%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 217 89% 45%;
+    --primary-light: 217 89% 95%;
+    
+    /* Google Green */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    
+    /* Google Red */
+    --destructive: 4 90% 58%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Google Yellow/Orange */
+    --warning: 36 100% 50%;
+    --warning-foreground: 0 0% 15%;
+    
+    /* Surfaces */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    --foreground: 213 5% 25%;
+    --surface: 0 0% 100%;
+    --surface-variant: 220 14% 96%;
+    --surface-container: 220 13% 97%;
+    --surface-container-high: 220 13% 94%;
+    --surface-container-highest: 220 13% 91%;
+    
+    /* Text colors */
+    --on-surface: 213 5% 25%;
+    --on-surface-variant: 213 5% 45%;
+    --text-primary: 213 5% 25%;
+    --text-secondary: 213 5% 45%;
+    --text-disabled: 213 5% 65%;
+    
+    /* Google Classroom specific */
+    --gc-header: 0 0% 100%;
+    --gc-sidebar: 0 0% 100%;
+    --gc-blue: 217 89% 51%;
+    --gc-blue-dark: 217 89% 42%;
+    --gc-green: 158 64% 40%;
+    --gc-purple: 262 52% 47%;
+    --gc-orange: 24 100% 50%;
+    --gc-cyan: 187 73% 45%;
+    --gc-pink: 340 82% 52%;
+    
+    /* Card & Components */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    --card-foreground: 213 5% 25%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
+    --popover-foreground: 213 5% 25%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 213 5% 25%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 213 5% 45%;
+    --accent: 217 89% 95%;
+    --accent-foreground: 217 89% 42%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 217 89% 51%;
+    
+    /* Radius - Material Design 3 */
     --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.5rem;
+    --radius-full: 9999px;
+    
+    /* Shadows - Material Design elevation */
+    --shadow-1: 0 1px 2px 0 rgb(60 64 67 / 0.3), 0 1px 3px 1px rgb(60 64 67 / 0.15);
+    --shadow-2: 0 1px 2px 0 rgb(60 64 67 / 0.3), 0 2px 6px 2px rgb(60 64 67 / 0.15);
+    --shadow-3: 0 1px 3px 0 rgb(60 64 67 / 0.3), 0 4px 8px 3px rgb(60 64 67 / 0.15);
+    --shadow-4: 0 2px 3px 0 rgb(60 64 67 / 0.3), 0 6px 10px 4px rgb(60 64 67 / 0.15);
+    --shadow-5: 0 4px 4px 0 rgb(60 64 67 / 0.3), 0 8px 12px 6px rgb(60 64 67 / 0.15);
+    
+    /* Sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 213 5% 25%;
+    --sidebar-primary: 217 89% 51%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 213 5% 25%;
     --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 217 89% 51%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --primary: 217 89% 61%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 217 89% 55%;
+    --primary-light: 217 30% 20%;
+    
+    --background: 220 10% 10%;
+    --foreground: 220 10% 90%;
+    --surface: 220 10% 12%;
+    --surface-variant: 220 10% 18%;
+    --surface-container: 220 10% 14%;
+    --surface-container-high: 220 10% 17%;
+    --surface-container-highest: 220 10% 22%;
+    
+    --on-surface: 220 10% 90%;
+    --on-surface-variant: 220 10% 70%;
+    --text-primary: 220 10% 90%;
+    --text-secondary: 220 10% 70%;
+    --text-disabled: 220 10% 50%;
+    
+    --card: 220 10% 12%;
+    --card-foreground: 220 10% 90%;
+    --popover: 220 10% 12%;
+    --popover-foreground: 220 10% 90%;
+    --secondary: 220 10% 18%;
+    --secondary-foreground: 220 10% 90%;
+    --muted: 220 10% 18%;
+    --muted-foreground: 220 10% 60%;
+    --accent: 217 30% 20%;
+    --accent-foreground: 217 89% 70%;
+    --border: 220 10% 20%;
+    --input: 220 10% 20%;
+    
+    --gc-header: 220 10% 12%;
+    --gc-sidebar: 220 10% 12%;
+    
+    --sidebar-background: 220 10% 10%;
+    --sidebar-foreground: 220 10% 90%;
+    --sidebar-primary: 217 89% 61%;
+    --sidebar-accent: 220 10% 18%;
+    --sidebar-border: 220 10% 20%;
   }
 }
 
@@ -98,8 +142,296 @@ All colors MUST be HSL.
   * {
     @apply border-border;
   }
-
+  
+  html {
+    font-family: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
   body {
     @apply bg-background text-foreground;
+    font-family: 'Google Sans Text', 'Roboto', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Google Sans', 'Roboto', sans-serif;
+    font-weight: 500;
+  }
+}
+
+@layer components {
+  /* Google Material Button styles */
+  .gc-btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-all;
+    font-family: 'Google Sans', sans-serif;
+    letter-spacing: 0.25px;
+  }
+  
+  .gc-btn-primary {
+    @apply gc-btn bg-primary text-primary-foreground hover:bg-primary/90;
+    box-shadow: var(--shadow-1);
+  }
+  
+  .gc-btn-primary:hover {
+    box-shadow: var(--shadow-2);
+  }
+  
+  .gc-btn-secondary {
+    @apply gc-btn bg-secondary text-secondary-foreground hover:bg-secondary/80;
+  }
+  
+  .gc-btn-text {
+    @apply gc-btn text-primary hover:bg-primary/10;
+  }
+  
+  .gc-btn-icon {
+    @apply p-2 rounded-full hover:bg-surface-variant transition-colors;
+  }
+  
+  /* Google Card styles */
+  .gc-card {
+    @apply bg-card rounded-lg;
+    box-shadow: var(--shadow-1);
+    transition: box-shadow 0.2s ease;
+  }
+  
+  .gc-card:hover {
+    box-shadow: var(--shadow-2);
+  }
+  
+  .gc-card-elevated {
+    @apply bg-card rounded-lg;
+    box-shadow: var(--shadow-2);
+  }
+  
+  /* Class card specific */
+  .gc-class-card {
+    @apply relative overflow-hidden rounded-lg cursor-pointer;
+    box-shadow: var(--shadow-1);
+    transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .gc-class-card:hover {
+    box-shadow: var(--shadow-3);
+  }
+  
+  /* Input styles */
+  .gc-input {
+    @apply w-full px-4 py-3 rounded-md border border-input bg-background text-foreground;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  
+  /* FAB (Floating Action Button) */
+  .gc-fab {
+    @apply fixed bottom-6 right-6 w-14 h-14 rounded-full bg-primary text-primary-foreground;
+    @apply flex items-center justify-center cursor-pointer z-50;
+    box-shadow: var(--shadow-3);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  
+  .gc-fab:hover {
+    box-shadow: var(--shadow-4);
+    transform: scale(1.05);
+  }
+  
+  /* Ripple effect */
+  .gc-ripple {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .gc-ripple::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  
+  .gc-ripple:active::after {
+    opacity: 0.1;
+  }
+  
+  /* Sidebar styles */
+  .gc-sidebar {
+    @apply fixed left-0 top-16 h-[calc(100vh-4rem)] w-72 bg-sidebar border-r border-sidebar-border;
+    @apply overflow-y-auto z-30;
+  }
+  
+  .gc-sidebar-item {
+    @apply flex items-center gap-4 px-6 py-3 text-sm text-on-surface-variant;
+    @apply hover:bg-sidebar-accent rounded-r-full mr-3 cursor-pointer transition-colors;
+    font-family: 'Google Sans Text', sans-serif;
+  }
+  
+  .gc-sidebar-item.active {
+    @apply bg-primary/10 text-primary font-medium;
+  }
+  
+  /* Header styles */
+  .gc-header {
+    @apply fixed top-0 left-0 right-0 h-16 bg-gc-header border-b border-border;
+    @apply flex items-center px-4 z-40;
+    box-shadow: var(--shadow-1);
+  }
+  
+  /* Tab styles like Google Classroom */
+  .gc-tab {
+    @apply relative px-6 py-4 text-sm font-medium text-on-surface-variant;
+    @apply hover:bg-surface-variant transition-colors cursor-pointer;
+    font-family: 'Google Sans', sans-serif;
+  }
+  
+  .gc-tab.active {
+    @apply text-primary;
+  }
+  
+  .gc-tab.active::after {
+    content: '';
+    @apply absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-t-full;
+  }
+  
+  /* Modal/Dialog styles */
+  .gc-dialog {
+    @apply fixed inset-0 z-50 flex items-center justify-center p-4;
+    background: rgba(0, 0, 0, 0.32);
+  }
+  
+  .gc-dialog-content {
+    @apply bg-card rounded-2xl max-w-lg w-full max-h-[90vh] overflow-auto;
+    box-shadow: var(--shadow-5);
+  }
+  
+  /* Snackbar/Toast */
+  .gc-snackbar {
+    @apply fixed bottom-6 left-1/2 -translate-x-1/2 px-6 py-4 rounded-lg;
+    @apply bg-[#323232] text-white text-sm z-50;
+    box-shadow: var(--shadow-3);
+  }
+  
+  /* Avatar */
+  .gc-avatar {
+    @apply w-10 h-10 rounded-full bg-primary text-primary-foreground;
+    @apply flex items-center justify-center font-medium text-sm;
+  }
+  
+  .gc-avatar-sm {
+    @apply w-8 h-8 text-xs;
+  }
+  
+  .gc-avatar-lg {
+    @apply w-12 h-12 text-base;
+  }
+  
+  /* Dropdown menu */
+  .gc-dropdown {
+    @apply bg-card rounded-md py-2 min-w-[200px] z-50;
+    box-shadow: var(--shadow-3);
+  }
+  
+  .gc-dropdown-item {
+    @apply px-4 py-2 text-sm text-on-surface hover:bg-surface-variant cursor-pointer;
+    @apply flex items-center gap-3;
+  }
+  
+  /* Stream post */
+  .gc-stream-post {
+    @apply bg-card border border-border rounded-lg p-4 mb-4;
+    @apply hover:border-primary/30 transition-colors;
+  }
+  
+  /* Assignment card */
+  .gc-assignment-card {
+    @apply flex items-center gap-4 p-4 border-b border-border;
+    @apply hover:bg-surface-variant cursor-pointer transition-colors;
+  }
+  
+  /* Chip/Badge */
+  .gc-chip {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+    @apply bg-surface-variant text-on-surface-variant;
+  }
+  
+  .gc-chip-primary {
+    @apply bg-primary/10 text-primary;
+  }
+  
+  /* Progress bar */
+  .gc-progress {
+    @apply h-1 w-full bg-surface-variant rounded-full overflow-hidden;
+  }
+  
+  .gc-progress-bar {
+    @apply h-full bg-primary transition-all duration-300;
+  }
+  
+  /* Loading spinner */
+  .gc-spinner {
+    @apply w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin;
+  }
+  
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+}
+
+/* Animation utilities */
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from { 
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
   }
 }
