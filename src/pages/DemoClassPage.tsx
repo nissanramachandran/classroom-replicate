@@ -1,0 +1,207 @@
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { MOCK_USER, MOCK_CLASSES, MOCK_ASSIGNMENTS, MOCK_MATERIALS, MOCK_POSTS, MOCK_STUDENTS } from '@/data/mockData';
+import DemoHeader from '@/components/layout/DemoHeader';
+import DemoSidebar from '@/components/layout/DemoSidebar';
+import DemoStreamTab from '@/components/class/DemoStreamTab';
+import DemoClassworkTab from '@/components/class/DemoClassworkTab';
+import DemoPeopleTab from '@/components/class/DemoPeopleTab';
+import DemoGradesTab from '@/components/class/DemoGradesTab';
+import CreateClassModal from '@/components/modals/CreateClassModal';
+import JoinClassModal from '@/components/modals/JoinClassModal';
+import { ArrowLeft, Settings, MoreVertical } from 'lucide-react';
+import { toast } from 'sonner';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
+
+type TabType = 'stream' | 'classwork' | 'people' | 'grades';
+
+const tabs: { id: TabType; label: string }[] = [
+  { id: 'stream', label: 'Stream' },
+  { id: 'classwork', label: 'Classwork' },
+  { id: 'people', label: 'People' },
+  { id: 'grades', label: 'Grades' },
+];
+
+const DemoClassPage: React.FC = () => {
+  const { classId } = useParams<{ classId: string }>();
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<TabType>('stream');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [joinModalOpen, setJoinModalOpen] = useState(false);
+
+  const classData = MOCK_CLASSES.find(c => c.id === classId);
+  const classAssignments = MOCK_ASSIGNMENTS.filter(a => a.class_id === classId);
+  const classMaterials = MOCK_MATERIALS.filter(m => m.class_id === classId);
+  const classPosts = MOCK_POSTS.filter(p => p.class_id === classId);
+  
+  const profile = MOCK_USER;
+  const isTeacher = profile.role === 'teacher';
+
+  if (!classData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-surface-container">
+        <div className="text-center">
+          <h2 className="text-xl font-google-sans text-foreground mb-4">Class not found</h2>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="gc-btn-primary"
+          >
+            Go to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const handleCreateClass = async (data: any) => {
+    toast.success('Class created!');
+    setCreateModalOpen(false);
+  };
+
+  const handleJoinClass = async (code: string) => {
+    toast.success('Successfully joined class!');
+    setJoinModalOpen(false);
+  };
+
+  return (
+    <div className="min-h-screen bg-surface-container">
+      <DemoHeader 
+        onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+        onCreateClick={() => setCreateModalOpen(true)}
+        onJoinClick={() => setJoinModalOpen(true)}
+      />
+      
+      <DemoSidebar 
+        isOpen={sidebarOpen} 
+        onClose={() => setSidebarOpen(false)}
+        classes={MOCK_CLASSES}
+      />
+
+      {/* Main content */}
+      <main className="pt-16 lg:pl-72">
+        {/* Class banner */}
+        <div 
+          className="relative h-48 sm:h-56 md:h-64"
+          style={{ backgroundColor: classData.banner_color || '#1967d2' }}
+        >
+          {/* Back button */}
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="absolute top-4 left-4 p-2 rounded-full bg-black/20 hover:bg-black/30 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5 text-white" />
+          </button>
+
+          {/* Class info */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/50 to-transparent">
+            <h1 className="text-2xl sm:text-3xl font-google-sans text-white mb-1">
+              {classData.title}
+            </h1>
+            {classData.section && (
+              <p className="text-white/90">{classData.section}</p>
+            )}
+          </div>
+
+          {/* Settings button for teachers */}
+          {isTeacher && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="absolute top-4 right-4 p-2 rounded-full bg-black/20 hover:bg-black/30 transition-colors">
+                  <MoreVertical className="w-5 h-5 text-white" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="gc-dropdown">
+                <DropdownMenuItem className="gc-dropdown-item">
+                  <Settings className="w-4 h-4 mr-2" />
+                  Class settings
+                </DropdownMenuItem>
+                <DropdownMenuItem className="gc-dropdown-item">
+                  Edit class
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+        </div>
+
+        {/* Tabs */}
+        <div className="border-b border-border bg-card sticky top-16 z-30">
+          <div className="max-w-5xl mx-auto px-4">
+            <nav className="flex gap-1" role="tablist">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  role="tab"
+                  aria-selected={activeTab === tab.id}
+                  className={cn(
+                    "gc-tab",
+                    activeTab === tab.id && "gc-tab-active"
+                  )}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+        </div>
+
+        {/* Tab content */}
+        <div className="p-4 sm:p-6">
+          {activeTab === 'stream' && (
+            <DemoStreamTab 
+              classData={classData} 
+              posts={classPosts}
+              isTeacher={isTeacher}
+            />
+          )}
+          {activeTab === 'classwork' && (
+            <DemoClassworkTab 
+              classId={classId!}
+              assignments={classAssignments}
+              materials={classMaterials}
+              isTeacher={isTeacher}
+            />
+          )}
+          {activeTab === 'people' && (
+            <DemoPeopleTab 
+              teacher={MOCK_USER}
+              students={MOCK_STUDENTS}
+              isTeacher={isTeacher}
+            />
+          )}
+          {activeTab === 'grades' && (
+            <DemoGradesTab 
+              assignments={classAssignments}
+              students={MOCK_STUDENTS}
+              isTeacher={isTeacher}
+            />
+          )}
+        </div>
+      </main>
+
+      {/* Modals */}
+      <CreateClassModal
+        isOpen={createModalOpen}
+        onClose={() => setCreateModalOpen(false)}
+        onSubmit={handleCreateClass}
+        loading={false}
+      />
+      
+      <JoinClassModal
+        isOpen={joinModalOpen}
+        onClose={() => setJoinModalOpen(false)}
+        onSubmit={handleJoinClass}
+        loading={false}
+      />
+    </div>
+  );
+};
+
+export default DemoClassPage;
