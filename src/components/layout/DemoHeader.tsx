@@ -1,7 +1,8 @@
 import React from 'react';
-import { Menu, Plus, HelpCircle, Settings as SettingsIcon, LogOut } from 'lucide-react';
+import { Menu, Plus, HelpCircle, Settings as SettingsIcon, LogOut, Moon, Sun } from 'lucide-react';
 import { MOCK_USER } from '@/data/mockData';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@/contexts/ThemeContext';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,6 +19,7 @@ interface DemoHeaderProps {
 
 const DemoHeader: React.FC<DemoHeaderProps> = ({ onMenuClick, onCreateClick, onJoinClick }) => {
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
   const profile = MOCK_USER;
   const isTeacher = profile.role === 'teacher';
 
@@ -27,7 +29,7 @@ const DemoHeader: React.FC<DemoHeaderProps> = ({ onMenuClick, onCreateClick, onJ
   };
 
   return (
-    <header className="gc-header">
+    <header className="gc-header transition-colors duration-300">
       {/* Left section */}
       <div className="flex items-center gap-1">
         <button
@@ -70,6 +72,19 @@ const DemoHeader: React.FC<DemoHeaderProps> = ({ onMenuClick, onCreateClick, onJ
           </DropdownMenuContent>
         </DropdownMenu>
 
+        {/* Theme toggle */}
+        <button 
+          onClick={toggleTheme}
+          className="gc-btn-icon hidden sm:flex" 
+          aria-label="Toggle theme"
+        >
+          {theme === 'dark' ? (
+            <Sun className="w-6 h-6 text-amber-500" />
+          ) : (
+            <Moon className="w-6 h-6 text-on-surface-variant" />
+          )}
+        </button>
+
         {/* Help */}
         <button className="gc-btn-icon hidden sm:flex" aria-label="Help">
           <HelpCircle className="w-6 h-6 text-on-surface-variant" />
@@ -99,16 +114,16 @@ const DemoHeader: React.FC<DemoHeaderProps> = ({ onMenuClick, onCreateClick, onJ
                   </p>
                 </div>
               </div>
-              <div className="mt-2">
+              <div className="mt-2 flex gap-2">
                 <span className="gc-chip gc-chip-primary">
                   {profile.role === 'teacher' ? 'Teacher' : 'Student'}
                 </span>
-                <span className="gc-chip ml-2 bg-amber-100 text-amber-800">
+                <span className="gc-chip bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100">
                   Demo Mode
                 </span>
               </div>
             </div>
-            <DropdownMenuItem className="gc-dropdown-item">
+            <DropdownMenuItem onClick={() => navigate('/settings')} className="gc-dropdown-item">
               <SettingsIcon className="w-5 h-5" />
               Settings
             </DropdownMenuItem>
