@@ -260,16 +260,17 @@
   /* Sidebar styles */
   .gc-sidebar {
     @apply fixed left-0 top-16 h-[calc(100vh-4rem)] w-72 bg-sidebar border-r border-sidebar-border;
-    @apply overflow-y-auto z-30;
+    @apply overflow-y-auto z-30 flex flex-col;
   }
   
   .gc-sidebar-item {
     @apply flex items-center gap-4 px-6 py-3 text-sm text-on-surface-variant;
-    @apply hover:bg-sidebar-accent rounded-r-full mr-3 cursor-pointer transition-colors;
+    @apply hover:bg-sidebar-accent rounded-r-full mr-3 cursor-pointer transition-all duration-200;
     font-family: 'Google Sans Text', sans-serif;
   }
   
-  .gc-sidebar-item.active {
+  .gc-sidebar-item.active,
+  .gc-sidebar-item-active {
     @apply bg-primary/10 text-primary font-medium;
   }
   
