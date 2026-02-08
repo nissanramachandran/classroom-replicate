@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Home, Calendar, ClipboardList, Settings, Archive, X, Moon, Sun } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/contexts/ThemeContext';
+import { getDemoUser } from '@/data/mockData';
 
 interface DemoSidebarProps {
   isOpen: boolean;
@@ -14,6 +15,8 @@ const DemoSidebar: React.FC<DemoSidebarProps> = ({ isOpen, onClose, classes }) =
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const profile = getDemoUser();
+  const isTeacher = profile.role === 'teacher';
 
   const navItems = [
     { icon: Home, label: 'Classes', path: '/dashboard' },
@@ -76,7 +79,7 @@ const DemoSidebar: React.FC<DemoSidebarProps> = ({ isOpen, onClose, classes }) =
         {/* Teaching/Enrolled label */}
         <div className="px-6 py-2">
           <p className="text-xs font-medium text-on-surface-variant uppercase tracking-wider">
-            Teaching
+            {isTeacher ? 'Teaching' : 'Enrolled'}
           </p>
         </div>
 

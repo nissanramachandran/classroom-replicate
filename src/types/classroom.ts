@@ -3,6 +3,22 @@ export type ClassRole = 'teacher' | 'student';
 export type ParentType = 'post' | 'assignment' | 'submission' | 'class';
 export type SubmissionStatus = 'assigned' | 'turned_in' | 'returned' | 'graded';
 
+// Department options for login
+export const DEPARTMENTS = [
+  'IT',
+  'CSE',
+  'ECE',
+  'EEE',
+  'MECH',
+  'CIVIL',
+  'AUTO',
+  'AIDS',
+  'AIML',
+  'BME',
+] as const;
+
+export type Department = typeof DEPARTMENTS[number];
+
 export interface Profile {
   id: string;
   user_id: string;
@@ -10,6 +26,7 @@ export interface Profile {
   full_name: string | null;
   avatar_url: string | null;
   role: AppRole | null;
+  department?: Department | null;
   created_at: string;
   updated_at: string;
 }

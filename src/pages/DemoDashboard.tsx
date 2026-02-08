@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MOCK_USER, MOCK_CLASSES } from '@/data/mockData';
+import { getDemoUser, MOCK_CLASSES } from '@/data/mockData';
 import DemoHeader from '@/components/layout/DemoHeader';
 import DemoSidebar from '@/components/layout/DemoSidebar';
 import DemoClassCard from '@/components/class/DemoClassCard';
 import DemoCreateClassModal from '@/components/modals/DemoCreateClassModal';
 import JoinClassModal from '@/components/modals/JoinClassModal';
 import { toast } from 'sonner';
-import { Plus, BookOpen } from 'lucide-react';
+import { Plus, BookOpen, Eye } from 'lucide-react';
 
 interface DemoClass {
   id: string;
@@ -36,8 +36,17 @@ const DemoDashboard: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [joinModalOpen, setJoinModalOpen] = useState(false);
+  const [profile, setProfile] = useState(getDemoUser());
 
-  const profile = MOCK_USER;
+  // Update profile when localStorage changes
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setProfile(getDemoUser());
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
   const isTeacher = profile.role === 'teacher';
 
   const handleCreateClass = (data: {
@@ -47,6 +56,11 @@ const DemoDashboard: React.FC = () => {
     room?: string;
     banner_color: string;
   }) => {
+    if (!isTeacher) {
+      toast.error('Only staff members can create classes');
+      return;
+    }
+    
     const newClass: DemoClass = {
       id: `class-${Date.now()}`,
       title: data.title,
@@ -55,11 +69,11 @@ const DemoDashboard: React.FC = () => {
       room: data.room || '',
       banner_color: data.banner_color,
       class_code: Math.random().toString(36).substring(2, 8).toUpperCase(),
-      owner_id: MOCK_USER.id,
+      owner_id: profile.id,
       description: '',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      owner: MOCK_USER,
+      owner: { ...profile, role: 'teacher' as const },
     };
     
     setClasses(prev => [...prev, newClass]);
@@ -74,6 +88,10 @@ const DemoDashboard: React.FC = () => {
   };
 
   const handleDeleteClass = (classId: string) => {
+    if (!isTeacher) {
+      toast.error('Only staff members can delete classes');
+      return;
+    }
     if (!confirm('Are you sure you want to delete this class?')) return;
     setClasses(prev => prev.filter(c => c.id !== classId));
     toast.success('Class deleted');
@@ -83,7 +101,7 @@ const DemoDashboard: React.FC = () => {
     <div className="min-h-screen bg-surface-container transition-colors duration-300">
       <DemoHeader 
         onMenuClick={() => setSidebarOpen(!sidebarOpen)}
-        onCreateClick={() => setCreateModalOpen(true)}
+        onCreateClick={() => isTeacher ? setCreateModalOpen(true) : toast.error('Only staff members can create classes')}
         onJoinClick={() => setJoinModalOpen(true)}
       />
       
@@ -97,9 +115,19 @@ const DemoDashboard: React.FC = () => {
       <main className="pt-16 lg:pl-72">
         <div className="p-6">
           {/* Page header */}
-          <div className="flex items-center gap-3 mb-6">
-            <BookOpen className="w-8 h-8 text-primary" />
-            <h1 className="text-2xl font-google-sans text-foreground">My Classes</h1>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <BookOpen className="w-8 h-8 text-primary" />
+              <h1 className="text-2xl font-google-sans text-foreground">My Classes</h1>
+            </div>
+            
+            {/* Student view mode indicator */}
+            {!isTeacher && (
+              <div className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full">
+                <Eye className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium text-primary">View Only Mode</span>
+              </div>
+            )}
           </div>
 
           {classes.length === 0 ? (
@@ -136,8 +164,9 @@ const DemoDashboard: React.FC = () => {
                   <DemoClassCard
                     classData={cls}
                     onClick={() => navigate(`/demo/class/${cls.id}`)}
-                    onEdit={() => {/* TODO: Edit modal */}}
-                    onDelete={() => handleDeleteClass(cls.id)}
+                    onEdit={isTeacher ? () => {/* TODO: Edit modal */} : undefined}
+                    onDelete={isTeacher ? () => handleDeleteClass(cls.id) : undefined}
+                    isViewOnly={!isTeacher}
                   />
                 </div>
               ))}
@@ -146,20 +175,24 @@ const DemoDashboard: React.FC = () => {
         </div>
       </main>
 
-      {/* Floating Action Button for mobile */}
-      <button
-        onClick={() => isTeacher ? setCreateModalOpen(true) : setJoinModalOpen(true)}
-        className="gc-fab lg:hidden"
-      >
-        <Plus className="w-6 h-6" />
-      </button>
+      {/* Floating Action Button for mobile - only for teachers */}
+      {isTeacher && (
+        <button
+          onClick={() => setCreateModalOpen(true)}
+          className="gc-fab lg:hidden"
+        >
+          <Plus className="w-6 h-6" />
+        </button>
+      )}
 
       {/* Modals */}
-      <DemoCreateClassModal
-        isOpen={createModalOpen}
-        onClose={() => setCreateModalOpen(false)}
-        onSubmit={handleCreateClass}
-      />
+      {isTeacher && (
+        <DemoCreateClassModal
+          isOpen={createModalOpen}
+          onClose={() => setCreateModalOpen(false)}
+          onSubmit={handleCreateClass}
+        />
+      )}
       
       <JoinClassModal
         isOpen={joinModalOpen}
