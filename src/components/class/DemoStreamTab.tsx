@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MOCK_USER } from '@/data/mockData';
+import { getDemoUser } from '@/data/mockData';
 
 interface DemoStreamTabProps {
   classData: any;
@@ -20,6 +20,7 @@ const DemoStreamTab: React.FC<DemoStreamTabProps> = ({ classData, posts: initial
   const [posts, setPosts] = useState(initialPosts);
   const [newPost, setNewPost] = useState('');
   const [showInput, setShowInput] = useState(false);
+  const profile = getDemoUser();
   const [copied, setCopied] = useState(false);
 
   const handleCopyCode = () => {
@@ -31,15 +32,19 @@ const DemoStreamTab: React.FC<DemoStreamTabProps> = ({ classData, posts: initial
 
   const handlePost = () => {
     if (!newPost.trim()) return;
+    if (!isTeacher) {
+      toast.error('Only staff members can post announcements');
+      return;
+    }
     
     const post = {
       id: `post-${Date.now()}`,
       class_id: classData.id,
-      author_id: MOCK_USER.id,
+      author_id: profile.id,
       content: newPost,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      author: MOCK_USER,
+      author: profile,
     };
     
     setPosts(prev => [post, ...prev]);
@@ -160,8 +165,8 @@ const DemoStreamTab: React.FC<DemoStreamTabProps> = ({ classData, posts: initial
               onClick={() => setShowInput(true)}
               className="w-full p-4 text-left hover:bg-surface-variant/50 transition-colors flex items-center gap-3"
             >
-              <div className="gc-avatar gc-avatar-sm bg-primary text-white">
-                {getInitials(MOCK_USER.full_name)}
+              <div className="gc-avatar gc-avatar-sm bg-gc-green text-white">
+                {getInitials(profile.full_name)}
               </div>
               <span className="text-on-surface-variant">Announce something to your class...</span>
             </button>
@@ -196,21 +201,23 @@ const DemoStreamTab: React.FC<DemoStreamTabProps> = ({ classData, posts: initial
                       </p>
                     </div>
                     
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <button className="gc-btn-icon">
-                          <MoreVertical className="w-5 h-5 text-on-surface-variant" />
-                        </button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="gc-dropdown">
-                        <DropdownMenuItem className="gc-dropdown-item">
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="gc-dropdown-item text-destructive">
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    {isTeacher && (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button className="gc-btn-icon">
+                            <MoreVertical className="w-5 h-5 text-on-surface-variant" />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="gc-dropdown">
+                          <DropdownMenuItem className="gc-dropdown-item">
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="gc-dropdown-item text-destructive">
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )}
                   </div>
                   
                   <p className="mt-3 text-foreground whitespace-pre-wrap">
@@ -221,9 +228,9 @@ const DemoStreamTab: React.FC<DemoStreamTabProps> = ({ classData, posts: initial
 
               {/* Comment input */}
               <div className="mt-4 pt-4 border-t border-border">
-                <div className="flex items-center gap-3">
-                  <div className="gc-avatar gc-avatar-sm bg-primary text-white shrink-0">
-                    {getInitials(MOCK_USER.full_name)}
+              <div className="flex items-center gap-3">
+                  <div className={`gc-avatar gc-avatar-sm ${isTeacher ? 'bg-gc-green' : 'bg-primary'} text-white shrink-0`}>
+                    {getInitials(profile.full_name)}
                   </div>
                   <input
                     type="text"

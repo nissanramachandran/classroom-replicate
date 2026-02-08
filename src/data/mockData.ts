@@ -1,11 +1,41 @@
 // Mock data for demo mode - bypasses authentication
-export const MOCK_USER = {
+import { AppRole, Department } from '@/types/classroom';
+
+// Demo user with configurable role - stored in localStorage for persistence
+const getStoredDemoRole = (): AppRole => {
+  if (typeof window !== 'undefined') {
+    return (localStorage.getItem('demoUserRole') as AppRole) || 'teacher';
+  }
+  return 'teacher';
+};
+
+const getStoredDemoDepartment = (): Department => {
+  if (typeof window !== 'undefined') {
+    return (localStorage.getItem('demoUserDepartment') as Department) || 'IT';
+  }
+  return 'IT';
+};
+
+export const getDemoUser = () => ({
   id: 'demo-user-001',
   email: 'demo@classroom.com',
   full_name: 'Demo User',
   avatar_url: null,
-  role: 'teacher' as const,
+  role: getStoredDemoRole(),
+  department: getStoredDemoDepartment(),
+});
+
+export const setDemoUserRole = (role: AppRole, department?: Department) => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('demoUserRole', role);
+    if (department) {
+      localStorage.setItem('demoUserDepartment', department);
+    }
+  }
 };
+
+// For backward compatibility
+export const MOCK_USER = getDemoUser();
 
 export const MOCK_TEACHERS = [
   { id: 't1', full_name: 'Dr. Sarah Johnson', email: 'sarah.j@university.edu', avatar_url: null, role: 'teacher' as const },

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { MOCK_USER, MOCK_CLASSES, MOCK_ASSIGNMENTS, MOCK_MATERIALS, MOCK_POSTS, MOCK_STUDENTS } from '@/data/mockData';
+import { getDemoUser, MOCK_CLASSES, MOCK_ASSIGNMENTS, MOCK_MATERIALS, MOCK_POSTS, MOCK_STUDENTS } from '@/data/mockData';
 import DemoHeader from '@/components/layout/DemoHeader';
 import DemoSidebar from '@/components/layout/DemoSidebar';
 import DemoStreamTab from '@/components/class/DemoStreamTab';
@@ -9,7 +9,7 @@ import DemoPeopleTab from '@/components/class/DemoPeopleTab';
 import DemoGradesTab from '@/components/class/DemoGradesTab';
 import CreateClassModal from '@/components/modals/CreateClassModal';
 import JoinClassModal from '@/components/modals/JoinClassModal';
-import { ArrowLeft, Settings, MoreVertical } from 'lucide-react';
+import { ArrowLeft, Settings, MoreVertical, Eye } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   DropdownMenu,
@@ -35,13 +35,22 @@ const DemoClassPage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [joinModalOpen, setJoinModalOpen] = useState(false);
+  const [profile, setProfile] = useState(getDemoUser());
+
+  // Update profile when localStorage changes
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setProfile(getDemoUser());
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   const classData = MOCK_CLASSES.find(c => c.id === classId);
   const classAssignments = MOCK_ASSIGNMENTS.filter(a => a.class_id === classId);
   const classMaterials = MOCK_MATERIALS.filter(m => m.class_id === classId);
   const classPosts = MOCK_POSTS.filter(p => p.class_id === classId);
   
-  const profile = MOCK_USER;
   const isTeacher = profile.role === 'teacher';
 
   if (!classData) {
@@ -61,6 +70,10 @@ const DemoClassPage: React.FC = () => {
   }
 
   const handleCreateClass = async (data: any) => {
+    if (!isTeacher) {
+      toast.error('Only staff members can create classes');
+      return;
+    }
     toast.success('Class created!');
     setCreateModalOpen(false);
   };
@@ -74,7 +87,7 @@ const DemoClassPage: React.FC = () => {
     <div className="min-h-screen bg-surface-container">
       <DemoHeader 
         onMenuClick={() => setSidebarOpen(!sidebarOpen)}
-        onCreateClick={() => setCreateModalOpen(true)}
+        onCreateClick={() => isTeacher ? setCreateModalOpen(true) : toast.error('Only staff members can create classes')}
         onJoinClick={() => setJoinModalOpen(true)}
       />
       
@@ -98,6 +111,14 @@ const DemoClassPage: React.FC = () => {
           >
             <ArrowLeft className="w-5 h-5 text-white" />
           </button>
+
+          {/* View only badge for students */}
+          {!isTeacher && (
+            <div className="absolute top-4 left-16 flex items-center gap-2 px-3 py-1.5 bg-black/30 backdrop-blur-sm rounded-full">
+              <Eye className="w-4 h-4 text-white" />
+              <span className="text-sm text-white font-medium">View Only Mode</span>
+            </div>
+          )}
 
           {/* Class info */}
           <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/50 to-transparent">
@@ -171,7 +192,7 @@ const DemoClassPage: React.FC = () => {
           )}
           {activeTab === 'people' && (
             <DemoPeopleTab 
-              teacher={MOCK_USER}
+              teacher={profile}
               students={MOCK_STUDENTS}
               isTeacher={isTeacher}
             />
@@ -186,13 +207,15 @@ const DemoClassPage: React.FC = () => {
         </div>
       </main>
 
-      {/* Modals */}
-      <CreateClassModal
-        isOpen={createModalOpen}
-        onClose={() => setCreateModalOpen(false)}
-        onSubmit={handleCreateClass}
-        loading={false}
-      />
+      {/* Modals - only create modal for teachers */}
+      {isTeacher && (
+        <CreateClassModal
+          isOpen={createModalOpen}
+          onClose={() => setCreateModalOpen(false)}
+          onSubmit={handleCreateClass}
+          loading={false}
+        />
+      )}
       
       <JoinClassModal
         isOpen={joinModalOpen}

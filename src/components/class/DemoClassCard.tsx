@@ -1,5 +1,5 @@
 import React from 'react';
-import { MoreVertical, FolderOpen, Users } from 'lucide-react';
+import { MoreVertical, FolderOpen, Users, Eye } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,7 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MOCK_USER } from '@/data/mockData';
+import { getDemoUser } from '@/data/mockData';
 
 interface DemoClassCardProps {
   classData: {
@@ -29,6 +29,7 @@ interface DemoClassCardProps {
   onClick: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
+  isViewOnly?: boolean;
 }
 
 const DemoClassCard: React.FC<DemoClassCardProps> = ({
@@ -36,8 +37,10 @@ const DemoClassCard: React.FC<DemoClassCardProps> = ({
   onClick,
   onEdit,
   onDelete,
+  isViewOnly = false,
 }) => {
-  const isOwner = true; // In demo mode, user is always the owner
+  const profile = getDemoUser();
+  const isOwner = !isViewOnly;
 
   const getInitials = (name: string | null) => {
     if (!name) return '?';
@@ -62,38 +65,48 @@ const DemoClassCard: React.FC<DemoClassCardProps> = ({
           </svg>
         </div>
 
-        {/* Three dot menu */}
-        <div className="absolute top-2 right-2 z-10" onClick={(e) => e.stopPropagation()}>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="p-2 rounded-full hover:bg-white/20 transition-colors">
-                <MoreVertical className="w-5 h-5 text-white" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="gc-dropdown">
-              <DropdownMenuItem onClick={onEdit} className="gc-dropdown-item">
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem className="gc-dropdown-item">
-                Copy link
-              </DropdownMenuItem>
-              <DropdownMenuItem className="gc-dropdown-item">
-                Copy class code
-              </DropdownMenuItem>
-              {isOwner && (
-                <>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={onDelete} className="gc-dropdown-item text-destructive">
-                    Delete
-                  </DropdownMenuItem>
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        {/* View only badge */}
+        {isViewOnly && (
+          <div className="absolute top-2 left-2 z-10 flex items-center gap-1 px-2 py-1 bg-black/30 backdrop-blur-sm rounded-full">
+            <Eye className="w-3 h-3 text-white" />
+            <span className="text-xs text-white font-medium">View Only</span>
+          </div>
+        )}
+
+        {/* Three dot menu - only show for staff */}
+        {!isViewOnly && (
+          <div className="absolute top-2 right-2 z-10" onClick={(e) => e.stopPropagation()}>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="p-2 rounded-full hover:bg-white/20 transition-colors">
+                  <MoreVertical className="w-5 h-5 text-white" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="gc-dropdown">
+                <DropdownMenuItem onClick={onEdit} className="gc-dropdown-item">
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem className="gc-dropdown-item">
+                  Copy link
+                </DropdownMenuItem>
+                <DropdownMenuItem className="gc-dropdown-item">
+                  Copy class code
+                </DropdownMenuItem>
+                {isOwner && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={onDelete} className="gc-dropdown-item text-destructive">
+                      Delete
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
 
         {/* Class title */}
-        <div className="absolute bottom-4 left-4 right-16">
+        <div className={`absolute bottom-4 left-4 ${isViewOnly ? 'right-4' : 'right-16'}`}>
           <h3 className="text-xl font-google-sans text-white truncate group-hover:underline transition-all">
             {classData.title}
           </h3>
@@ -105,7 +118,7 @@ const DemoClassCard: React.FC<DemoClassCardProps> = ({
         {/* Teacher avatar */}
         <div className="absolute -bottom-6 right-4 transition-transform group-hover:scale-110">
           <div className="gc-avatar gc-avatar-lg border-2 border-card bg-primary text-white shadow-md">
-            {getInitials(classData.owner?.full_name || MOCK_USER.full_name)}
+            {getInitials(classData.owner?.full_name || profile.full_name)}
           </div>
         </div>
       </div>

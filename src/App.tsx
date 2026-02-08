@@ -2,10 +2,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ClassroomProvider } from "@/contexts/ClassroomContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import DemoDashboard from "./pages/DemoDashboard";
@@ -42,10 +43,21 @@ const App = () => (
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="/archived" element={<ArchivedPage />} />
                 
-                {/* Auth routes (original) */}
+                {/* Auth routes */}
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/select-role" element={<RoleSelection />} />
-                <Route path="/class/:classId" element={<ClassPage />} />
+                
+                {/* Protected routes (require authentication) */}
+                <Route path="/app" element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/class/:classId" element={
+                  <ProtectedRoute>
+                    <ClassPage />
+                  </ProtectedRoute>
+                } />
                 
                 <Route path="*" element={<NotFound />} />
               </Routes>

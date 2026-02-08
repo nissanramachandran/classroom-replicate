@@ -1,18 +1,20 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { Profile, AppRole } from '@/types/classroom';
+import { Profile, AppRole, Department } from '@/types/classroom';
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   profile: Profile | null;
   loading: boolean;
+  isStaff: boolean;
+  isStudent: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null }>;
   signInWithGoogle: () => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
-  setUserRole: (role: AppRole) => Promise<{ error: Error | null }>;
+  setUserRole: (role: AppRole, department?: Department) => Promise<{ error: Error | null }>;
   refreshProfile: () => Promise<void>;
 }
 
@@ -115,13 +117,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setProfile(null);
   };
 
-  const setUserRole = async (role: AppRole) => {
+  const setUserRole = async (role: AppRole, department?: Department) => {
     if (!user) return { error: new Error('No user logged in') };
 
-    // Update profile with role
+    // Update profile with role and department
+    const updateData: { role: AppRole; department?: string } = { role };
+    if (department) {
+      updateData.department = department;
+    }
+
     const { error: profileError } = await supabase
       .from('profiles')
-      .update({ role })
+      .update(updateData)
       .eq('user_id', user.id);
 
     if (profileError) return { error: profileError as Error };
@@ -137,12 +144,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { error: null };
   };
 
+  // Computed properties for role checks
+  const isStaff = profile?.role === 'teacher';
+  const isStudent = profile?.role === 'student';
+
   return (
     <AuthContext.Provider value={{
       user,
       session,
       profile,
       loading,
+      isStaff,
+      isStudent,
       signIn,
       signUp,
       signInWithGoogle,
