@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, Calendar, ClipboardList, Settings, Archive, X, Moon, Sun } from 'lucide-react';
+import { Home, Calendar, ClipboardList, Settings, Archive, X, Moon, Sun, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/contexts/ThemeContext';
 import { getDemoUser } from '@/data/mockData';
@@ -20,6 +20,7 @@ const DemoSidebar: React.FC<DemoSidebarProps> = ({ isOpen, onClose, classes }) =
 
   const navItems = [
     { icon: Home, label: 'Classes', path: '/dashboard' },
+    { icon: User, label: 'Profile', path: '/profile' },
     { icon: Calendar, label: 'Calendar', path: '/calendar' },
     { icon: ClipboardList, label: 'To-do', path: '/todo' },
     { icon: Settings, label: 'Settings', path: '/settings' },

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Menu, Plus, HelpCircle, Settings as SettingsIcon, LogOut, Moon, Sun, RefreshCw } from 'lucide-react';
+import { Menu, Plus, HelpCircle, Settings as SettingsIcon, LogOut, Moon, Sun, RefreshCw, User } from 'lucide-react';
 import { getDemoUser, setDemoUserRole } from '@/data/mockData';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@/contexts/ThemeContext';
 import { toast } from 'sonner';
+import NotificationBell from './NotificationBell';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -99,6 +100,9 @@ const DemoHeader: React.FC<DemoHeaderProps> = ({ onMenuClick, onCreateClick, onJ
           )}
         </button>
 
+        {/* Notification Bell */}
+        <NotificationBell />
+
         {/* Help */}
         <button className="gc-btn-icon hidden sm:flex" aria-label="Help">
           <HelpCircle className="w-6 h-6 text-on-surface-variant" />
@@ -140,6 +144,10 @@ const DemoHeader: React.FC<DemoHeaderProps> = ({ onMenuClick, onCreateClick, onJ
                 </span>
               </div>
             </div>
+            <DropdownMenuItem onClick={() => navigate('/profile')} className="gc-dropdown-item">
+              <User className="w-5 h-5" />
+              My Profile
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={handleRoleSwitch} className="gc-dropdown-item">
               <RefreshCw className="w-5 h-5" />
               Switch to {isTeacher ? 'Student' : 'Staff'} View

@@ -7,9 +7,12 @@ import DemoStreamTab from '@/components/class/DemoStreamTab';
 import DemoClassworkTab from '@/components/class/DemoClassworkTab';
 import DemoPeopleTab from '@/components/class/DemoPeopleTab';
 import DemoGradesTab from '@/components/class/DemoGradesTab';
+import AIDoubtSolver from '@/components/class/AIDoubtSolver';
+import AIStaffTools from '@/components/class/AIStaffTools';
+import ClassDiscussion from '@/components/class/ClassDiscussion';
 import CreateClassModal from '@/components/modals/CreateClassModal';
 import JoinClassModal from '@/components/modals/JoinClassModal';
-import { ArrowLeft, Settings, MoreVertical, Eye } from 'lucide-react';
+import { ArrowLeft, Settings, MoreVertical, Eye, Sparkles, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   DropdownMenu,
@@ -19,13 +22,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 
-type TabType = 'stream' | 'classwork' | 'people' | 'grades';
+type TabType = 'stream' | 'classwork' | 'people' | 'grades' | 'discussion';
 
 const tabs: { id: TabType; label: string }[] = [
   { id: 'stream', label: 'Stream' },
   { id: 'classwork', label: 'Classwork' },
   { id: 'people', label: 'People' },
   { id: 'grades', label: 'Grades' },
+  { id: 'discussion', label: 'Discussion' },
 ];
 
 const DemoClassPage: React.FC = () => {
@@ -35,6 +39,8 @@ const DemoClassPage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [joinModalOpen, setJoinModalOpen] = useState(false);
+  const [aiDoubtOpen, setAiDoubtOpen] = useState(false);
+  const [aiToolsOpen, setAiToolsOpen] = useState(false);
   const [profile, setProfile] = useState(getDemoUser());
 
   // Update profile when localStorage changes
@@ -130,25 +136,49 @@ const DemoClassPage: React.FC = () => {
             )}
           </div>
 
-          {/* Settings button for teachers */}
-          {isTeacher && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="absolute top-4 right-4 p-2 rounded-full bg-black/20 hover:bg-black/30 transition-colors">
-                  <MoreVertical className="w-5 h-5 text-white" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="gc-dropdown">
-                <DropdownMenuItem className="gc-dropdown-item">
-                  <Settings className="w-4 h-4 mr-2" />
-                  Class settings
-                </DropdownMenuItem>
-                <DropdownMenuItem className="gc-dropdown-item">
-                  Edit class
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+          {/* AI & Settings buttons */}
+          <div className="absolute top-4 right-4 flex items-center gap-2">
+            {/* AI Doubt Solver button (students) */}
+            {!isTeacher && (
+              <button
+                onClick={() => setAiDoubtOpen(true)}
+                className="flex items-center gap-2 px-3 py-2 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors"
+              >
+                <Sparkles className="w-4 h-4 text-white" />
+                <span className="text-sm text-white font-medium hidden sm:inline">Ask AI Doubt</span>
+              </button>
+            )}
+
+            {/* AI Staff Tools button (teachers) */}
+            {isTeacher && (
+              <button
+                onClick={() => setAiToolsOpen(true)}
+                className="flex items-center gap-2 px-3 py-2 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors"
+              >
+                <Sparkles className="w-4 h-4 text-white" />
+                <span className="text-sm text-white font-medium hidden sm:inline">AI Tools</span>
+              </button>
+            )}
+
+            {isTeacher && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="p-2 rounded-full bg-black/20 hover:bg-black/30 transition-colors">
+                    <MoreVertical className="w-5 h-5 text-white" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="gc-dropdown">
+                  <DropdownMenuItem className="gc-dropdown-item">
+                    <Settings className="w-4 h-4 mr-2" />
+                    Class settings
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="gc-dropdown-item">
+                    Edit class
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </div>
         </div>
 
         {/* Tabs */}
@@ -204,8 +234,27 @@ const DemoClassPage: React.FC = () => {
               isTeacher={isTeacher}
             />
           )}
+          {activeTab === 'discussion' && (
+            <div className="max-w-3xl mx-auto">
+              <ClassDiscussion classId={classId!} isTeacher={isTeacher} />
+            </div>
+          )}
         </div>
       </main>
+
+      {/* AI Modals */}
+      <AIDoubtSolver
+        isOpen={aiDoubtOpen}
+        onClose={() => setAiDoubtOpen(false)}
+        classTitle={classData.title}
+        subject={classData.subject || 'General'}
+      />
+      <AIStaffTools
+        isOpen={aiToolsOpen}
+        onClose={() => setAiToolsOpen(false)}
+        classTitle={classData.title}
+        subject={classData.subject || 'General'}
+      />
 
       {/* Modals - only create modal for teachers */}
       {isTeacher && (

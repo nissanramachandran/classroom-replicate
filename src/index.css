@@ -288,11 +288,13 @@
     font-family: 'Google Sans', sans-serif;
   }
   
-  .gc-tab.active {
+  .gc-tab.active,
+  .gc-tab-active {
     @apply text-primary;
   }
   
-  .gc-tab.active::after {
+  .gc-tab.active::after,
+  .gc-tab-active::after {
     content: '';
     @apply absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-t-full;
   }
