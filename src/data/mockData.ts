@@ -16,14 +16,17 @@ const getStoredDemoDepartment = (): Department => {
   return 'IT';
 };
 
-export const getDemoUser = () => ({
-  id: 'demo-user-001',
-  email: 'demo@classroom.com',
-  full_name: 'Demo User',
-  avatar_url: null,
-  role: getStoredDemoRole(),
-  department: getStoredDemoDepartment(),
-});
+export const getDemoUser = () => {
+  const role = getStoredDemoRole();
+  return {
+    id: 'demo-user-001',
+    email: role === 'teacher' ? 'tharani.vimal@university.edu' : 'nissan@student.edu',
+    full_name: role === 'teacher' ? 'Tharani Vimal' : 'Nissan',
+    avatar_url: null,
+    role,
+    department: getStoredDemoDepartment(),
+  };
+};
 
 export const setDemoUserRole = (role: AppRole, department?: Department) => {
   if (typeof window !== 'undefined') {

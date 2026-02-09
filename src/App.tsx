@@ -15,6 +15,7 @@ import CalendarPage from "./pages/CalendarPage";
 import TodoPage from "./pages/TodoPage";
 import SettingsPage from "./pages/SettingsPage";
 import ArchivedPage from "./pages/ArchivedPage";
+import ProfilePage from "./pages/ProfilePage";
 import Auth from "./pages/Auth";
 import RoleSelection from "./pages/RoleSelection";
 import ClassPage from "./pages/ClassPage";
@@ -42,6 +43,7 @@ const App = () => (
                 <Route path="/todo" element={<TodoPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="/archived" element={<ArchivedPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
                 
                 {/* Auth routes */}
                 <Route path="/auth" element={<Auth />} />

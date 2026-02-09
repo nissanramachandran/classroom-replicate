@@ -6,6 +6,7 @@ import DemoSidebar from '@/components/layout/DemoSidebar';
 import DemoClassCard from '@/components/class/DemoClassCard';
 import DemoCreateClassModal from '@/components/modals/DemoCreateClassModal';
 import JoinClassModal from '@/components/modals/JoinClassModal';
+import StudentPerformance from '@/components/class/StudentPerformance';
 import { toast } from 'sonner';
 import { Plus, BookOpen, Eye } from 'lucide-react';
 
@@ -129,6 +130,9 @@ const DemoDashboard: React.FC = () => {
               </div>
             )}
           </div>
+
+          {/* Student Performance Dashboard */}
+          {!isTeacher && <StudentPerformance />}
 
           {classes.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
