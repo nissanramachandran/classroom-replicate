@@ -3,6 +3,7 @@ import { Menu, Plus, HelpCircle, Settings as SettingsIcon, LogOut, Moon, Sun, Re
 import { getDemoUser, setDemoUserRole } from '@/data/mockData';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import NotificationBell from './NotificationBell';
 import {
