@@ -37,14 +37,14 @@ const App = () => (
                 {/* Landing page */}
                 <Route path="/" element={<Index />} />
                 
-                {/* Demo routes (no auth required) */}
-                <Route path="/dashboard" element={<DemoDashboard />} />
-                <Route path="/demo/class/:classId" element={<DemoClassPage />} />
-                <Route path="/calendar" element={<CalendarPage />} />
-                <Route path="/todo" element={<TodoPage />} />
-                <Route path="/settings" element={<SettingsPage />} />
-                <Route path="/archived" element={<ArchivedPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
+                {/* Classroom routes — require login */}
+                <Route path="/dashboard" element={<RequireAuth><DemoDashboard /></RequireAuth>} />
+                <Route path="/demo/class/:classId" element={<RequireAuth><DemoClassPage /></RequireAuth>} />
+                <Route path="/calendar" element={<RequireAuth><CalendarPage /></RequireAuth>} />
+                <Route path="/todo" element={<RequireAuth><TodoPage /></RequireAuth>} />
+                <Route path="/settings" element={<RequireAuth><SettingsPage /></RequireAuth>} />
+                <Route path="/archived" element={<RequireAuth><ArchivedPage /></RequireAuth>} />
+                <Route path="/profile" element={<RequireAuth><ProfilePage /></RequireAuth>} />
                 
                 {/* Auth routes */}
                 <Route path="/auth" element={<Auth />} />
