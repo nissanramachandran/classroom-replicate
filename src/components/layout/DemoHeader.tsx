@@ -23,8 +23,15 @@ interface DemoHeaderProps {
 const DemoHeader: React.FC<DemoHeaderProps> = ({ onMenuClick, onCreateClick, onJoinClick }) => {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
+  const { signOut } = useAuth();
   const [profile, setProfile] = React.useState(getDemoUser());
   const isTeacher = profile.role === 'teacher';
+
+  const handleLogout = async () => {
+    await signOut();
+    toast.success('Logged out');
+    navigate('/auth', { replace: true });
+  };
 
   const getInitials = (name: string | null) => {
     if (!name) return '?';
