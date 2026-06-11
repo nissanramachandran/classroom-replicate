@@ -35,13 +35,11 @@ const Auth: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Redirect if already logged in
+  // Redirect if already logged in — go straight to dashboard
   useEffect(() => {
-    if (user && profile?.role) {
+    if (user) {
       const from = (location.state as any)?.from?.pathname || '/dashboard';
       navigate(from, { replace: true });
-    } else if (user && !profile?.role) {
-      navigate('/select-role', { replace: true });
     }
   }, [user, profile, navigate, location]);
 

@@ -3,6 +3,7 @@ import { Menu, Plus, HelpCircle, Settings as SettingsIcon, LogOut, Moon, Sun, Re
 import { getDemoUser, setDemoUserRole } from '@/data/mockData';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import NotificationBell from './NotificationBell';
 import {
@@ -22,8 +23,15 @@ interface DemoHeaderProps {
 const DemoHeader: React.FC<DemoHeaderProps> = ({ onMenuClick, onCreateClick, onJoinClick }) => {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
+  const { signOut } = useAuth();
   const [profile, setProfile] = React.useState(getDemoUser());
   const isTeacher = profile.role === 'teacher';
+
+  const handleLogout = async () => {
+    await signOut();
+    toast.success('Logged out');
+    navigate('/auth', { replace: true });
+  };
 
   const getInitials = (name: string | null) => {
     if (!name) return '?';
@@ -157,9 +165,9 @@ const DemoHeader: React.FC<DemoHeaderProps> = ({ onMenuClick, onCreateClick, onJ
               Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => navigate('/')} className="gc-dropdown-item text-destructive">
+            <DropdownMenuItem onClick={handleLogout} className="gc-dropdown-item text-destructive">
               <LogOut className="w-5 h-5" />
-              Exit Demo
+              Logout
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
