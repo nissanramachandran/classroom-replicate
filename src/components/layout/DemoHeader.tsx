@@ -165,9 +165,9 @@ const DemoHeader: React.FC<DemoHeaderProps> = ({ onMenuClick, onCreateClick, onJ
               Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => navigate('/')} className="gc-dropdown-item text-destructive">
+            <DropdownMenuItem onClick={handleLogout} className="gc-dropdown-item text-destructive">
               <LogOut className="w-5 h-5" />
-              Exit Demo
+              Logout
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
