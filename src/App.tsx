@@ -7,6 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ClassroomProvider } from "@/contexts/ClassroomContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import RequireAuth from "@/components/auth/RequireAuth";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import DemoDashboard from "./pages/DemoDashboard";
