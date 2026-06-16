@@ -11,7 +11,8 @@ const ProfilePage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const profile = getDemoUser();
-  const isTeacher = profile.role === 'teacher';
+  const isTeacher = profile.role === 'staff' || profile.role === 'hod';
+  const roleLabel = profile.role === 'hod' ? 'HOD' : isTeacher ? 'Staff' : 'Student';
 
   // Profile display names based on role
   const displayName = isTeacher ? 'Tharani Vimal' : 'Nissan';
@@ -71,7 +72,7 @@ const ProfilePage: React.FC = () => {
                       isTeacher ? "bg-gc-green/10 text-gc-green" : "gc-chip-primary"
                     )}>
                       <Shield className="w-3 h-3 mr-1" />
-                      {isTeacher ? 'Staff' : 'Student'}
+                      {roleLabel}
                     </span>
                   </div>
                   <p className="text-on-surface-variant mt-1">{displayEmail}</p>
@@ -128,7 +129,7 @@ const ProfilePage: React.FC = () => {
                   <label className="text-xs font-medium text-on-surface-variant uppercase tracking-wider">Role</label>
                   <p className="text-foreground mt-1 flex items-center gap-2">
                     <Shield className="w-4 h-4 text-on-surface-variant" />
-                    {isTeacher ? 'Staff / Teacher' : 'Student'}
+                    {roleLabel}
                   </p>
                 </div>
               </div>

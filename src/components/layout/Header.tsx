@@ -19,7 +19,8 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onMenuClick, onCreateClick, onJoinClick }) => {
   const { profile, signOut } = useAuth();
   const navigate = useNavigate();
-  const isTeacher = profile?.role === 'teacher';
+  const isTeacher = profile?.role === 'staff' || profile?.role === 'hod';
+  const roleLabel = profile?.role === 'hod' ? 'HOD' : isTeacher ? 'Staff' : 'Student';
 
   const getInitials = (name: string | null) => {
     if (!name) return '?';
@@ -122,7 +123,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, onCreateClick, onJoinClick
               </div>
               <div className="mt-2">
                 <span className="gc-chip gc-chip-primary">
-                  {profile?.role === 'teacher' ? 'Teacher' : 'Student'}
+                  {roleLabel}
                 </span>
               </div>
             </div>

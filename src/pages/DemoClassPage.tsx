@@ -57,7 +57,7 @@ const DemoClassPage: React.FC = () => {
   const classMaterials = MOCK_MATERIALS.filter(m => m.class_id === classId);
   const classPosts = MOCK_POSTS.filter(p => p.class_id === classId);
   
-  const isTeacher = profile.role === 'teacher';
+  const isTeacher = profile.role === 'staff' || profile.role === 'hod';
 
   if (!classData) {
     return (
