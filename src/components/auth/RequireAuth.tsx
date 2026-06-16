@@ -9,7 +9,7 @@ import { Loader2 } from 'lucide-react';
  * with simple email/password signup without breaking existing UI.
  */
 const RequireAuth: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user, profile, loading } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -22,6 +22,10 @@ const RequireAuth: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   if (!user) {
     return <Navigate to="/auth" state={{ from: location }} replace />;
+  }
+
+  if (!profile?.role) {
+    return <Navigate to="/select-role" replace />;
   }
 
   return <>{children}</>;

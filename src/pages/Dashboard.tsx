@@ -91,7 +91,7 @@ const Dashboard: React.FC = () => {
     );
   }
 
-  const isTeacher = profile?.role === 'teacher';
+  const isTeacher = profile?.role === 'staff' || profile?.role === 'hod';
 
   return (
     <div className="min-h-screen bg-surface-container">

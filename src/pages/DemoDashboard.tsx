@@ -48,7 +48,7 @@ const DemoDashboard: React.FC = () => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  const isTeacher = profile.role === 'teacher';
+  const isTeacher = profile.role === 'staff' || profile.role === 'hod';
 
   const handleCreateClass = (data: {
     title: string;

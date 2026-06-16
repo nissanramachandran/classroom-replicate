@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { lovable } from '@/integrations/lovable';
 import { Profile, AppRole, Department } from '@/types/classroom';
 
 interface AuthContextType {
@@ -10,8 +11,9 @@ interface AuthContextType {
   loading: boolean;
   isStaff: boolean;
   isStudent: boolean;
+  isHod: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null }>;
+  signUp: (email: string, password: string, fullName: string, role?: AppRole, department?: Department) => Promise<{ error: Error | null }>;
   signInWithGoogle: () => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   setUserRole: (role: AppRole, department?: Department) => Promise<{ error: Error | null }>;
@@ -37,7 +39,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error('Error fetching profile:', error);
       return null;
     }
-    return data as Profile;
+    const profileData = data as Profile;
+    if (typeof window !== 'undefined' && profileData.role) {
+      localStorage.setItem('demoUserRole', profileData.role);
+      if (profileData.department) localStorage.setItem('demoUserDepartment', profileData.department);
+    }
+    return profileData;
   };
 
   const refreshProfile = async () => {
@@ -86,7 +93,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { error: error as Error | null };
   };
 
-  const signUp = async (email: string, password: string, fullName: string) => {
+  const signUp = async (email: string, password: string, fullName: string, role?: AppRole, department?: Department) => {
     const redirectUrl = `${window.location.origin}/`;
     
     const { error } = await supabase.auth.signUp({
@@ -96,6 +103,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         emailRedirectTo: redirectUrl,
         data: {
           full_name: fullName,
+          role,
+          department,
         },
       },
     });
@@ -103,13 +112,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/`,
-      },
+    const result = await lovable.auth.signInWithOAuth('google', {
+      redirect_uri: window.location.origin,
+      extraParams: { prompt: 'select_account' },
     });
-    return { error: error as Error | null };
+    return { error: result.error as Error | null };
   };
 
   const signOut = async () => {
@@ -128,15 +135,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const { error: profileError } = await supabase
       .from('profiles')
-      .update(updateData)
-      .eq('user_id', user.id);
+      .upsert({
+        id: user.id,
+        user_id: user.id,
+        email: user.email || '',
+        full_name: user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || null,
+        ...updateData,
+      }, { onConflict: 'user_id' });
 
     if (profileError) return { error: profileError as Error };
 
-    // Add to user_roles table
+    // Keep legacy class membership policies compatible with staff/HOD users.
+    const classRole = role === 'student' ? 'student' : 'teacher';
     const { error: roleError } = await supabase
       .from('user_roles')
-      .upsert({ user_id: user.id, role }, { onConflict: 'user_id,role' });
+      .upsert({ user_id: user.id, role: classRole }, { onConflict: 'user_id,role' });
 
     if (roleError) return { error: roleError as Error };
 
@@ -145,8 +158,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Computed properties for role checks
-  const isStaff = profile?.role === 'teacher';
+  const isStaff = profile?.role === 'staff';
   const isStudent = profile?.role === 'student';
+  const isHod = profile?.role === 'hod';
 
   return (
     <AuthContext.Provider value={{
@@ -156,6 +170,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       loading,
       isStaff,
       isStudent,
+      isHod,
       signIn,
       signUp,
       signInWithGoogle,
