@@ -199,7 +199,7 @@ const Auth: React.FC = () => {
             </p>
 
             {/* Role toggle */}
-            <div className="flex p-1 bg-surface-container rounded-xl mb-6">
+            <div className="grid grid-cols-3 p-1 bg-surface-container rounded-xl mb-6">
               <button
                 type="button"
                 onClick={() => setLoginMode('staff')}
@@ -225,6 +225,19 @@ const Auth: React.FC = () => {
               >
                 <Users className="w-5 h-5" />
                 Student
+              </button>
+              <button
+                type="button"
+                onClick={() => setLoginMode('hod')}
+                className={cn(
+                  "flex items-center justify-center gap-2 py-3 px-4 rounded-lg font-medium transition-all duration-300",
+                  loginMode === 'hod'
+                    ? "bg-gc-purple text-white shadow-lg"
+                    : "text-on-surface-variant hover:bg-surface-container-high"
+                )}
+              >
+                <Building2 className="w-5 h-5" />
+                HOD
               </button>
             </div>
 
@@ -262,12 +275,12 @@ const Auth: React.FC = () => {
               )}
 
               {/* Staff ID / Register Number based on mode */}
-              {loginMode === 'staff' ? (
+              {loginMode === 'staff' || loginMode === 'hod' ? (
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-on-surface-variant" />
                   <Input
                     type="text"
-                    placeholder="Staff ID or Email"
+                    placeholder={loginMode === 'hod' ? 'HOD ID or Email' : 'Staff ID or Email'}
                     value={staffId || email}
                     onChange={(e) => {
                       if (e.target.value.includes('@')) {
@@ -321,9 +334,11 @@ const Auth: React.FC = () => {
                 disabled={loading}
                 className={cn(
                   "w-full h-12 font-medium transition-all duration-300",
-                  loginMode === 'staff' 
-                    ? "bg-primary hover:bg-primary/90" 
-                    : "bg-gc-green hover:bg-gc-green/90"
+                  loginMode === 'student'
+                    ? "bg-gc-green hover:bg-gc-green/90"
+                    : loginMode === 'hod'
+                      ? "bg-gc-purple hover:bg-gc-purple/90"
+                      : "bg-primary hover:bg-primary/90"
                 )}
               >
                 {loading ? (
