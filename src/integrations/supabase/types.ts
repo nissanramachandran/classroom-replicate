@@ -336,7 +336,7 @@ export type Database = {
           department?: string | null
           email: string
           full_name?: string | null
-          id?: string
+          id: string
           role?: Database["public"]["Enums"]["app_role"] | null
           updated_at?: string
           user_id: string
@@ -440,7 +440,7 @@ export type Database = {
       is_class_teacher: { Args: { p_class_id: string }; Returns: boolean }
     }
     Enums: {
-      app_role: "teacher" | "student"
+      app_role: "teacher" | "student" | "staff" | "hod"
       class_role: "teacher" | "student"
       parent_type: "post" | "assignment" | "submission" | "class"
     }
@@ -570,7 +570,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["teacher", "student"],
+      app_role: ["teacher", "student", "staff", "hod"],
       class_role: ["teacher", "student"],
       parent_type: ["post", "assignment", "submission", "class"],
     },
