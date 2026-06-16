@@ -1,4 +1,4 @@
-export type AppRole = 'teacher' | 'student';
+export type AppRole = 'student' | 'staff' | 'hod';
 export type ClassRole = 'teacher' | 'student';
 export type ParentType = 'post' | 'assignment' | 'submission' | 'class';
 export type SubmissionStatus = 'assigned' | 'turned_in' | 'returned' | 'graded';

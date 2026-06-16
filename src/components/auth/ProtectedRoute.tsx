@@ -2,10 +2,11 @@ import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Loader2 } from 'lucide-react';
+import { AppRole } from '@/types/classroom';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  requireRole?: 'teacher' | 'student';
+  requireRole?: AppRole;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireRole }) => {

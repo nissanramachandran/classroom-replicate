@@ -1,12 +1,13 @@
-// Mock data for demo mode - bypasses authentication
+// Mock data for the classroom UI; authentication is handled by Supabase.
 import { AppRole, Department } from '@/types/classroom';
 
-// Demo user with configurable role - stored in localStorage for persistence
+// UI role display cache only; this is not authentication state.
 const getStoredDemoRole = (): AppRole => {
   if (typeof window !== 'undefined') {
-    return (localStorage.getItem('demoUserRole') as AppRole) || 'teacher';
+    const role = localStorage.getItem('demoUserRole') as AppRole | null;
+    return role === 'student' || role === 'staff' || role === 'hod' ? role : 'staff';
   }
-  return 'teacher';
+  return 'staff';
 };
 
 const getStoredDemoDepartment = (): Department => {
@@ -18,10 +19,15 @@ const getStoredDemoDepartment = (): Department => {
 
 export const getDemoUser = () => {
   const role = getStoredDemoRole();
+  const identity = role === 'student'
+    ? { email: 'nissan@student.edu', full_name: 'Nissan' }
+    : role === 'hod'
+      ? { email: 'hod@university.edu', full_name: 'HOD Admin' }
+      : { email: 'tharani.vimal@university.edu', full_name: 'Tharani Vimal' };
   return {
     id: 'demo-user-001',
-    email: role === 'teacher' ? 'tharani.vimal@university.edu' : 'nissan@student.edu',
-    full_name: role === 'teacher' ? 'Tharani Vimal' : 'Nissan',
+    email: identity.email,
+    full_name: identity.full_name,
     avatar_url: null,
     role,
     department: getStoredDemoDepartment(),
