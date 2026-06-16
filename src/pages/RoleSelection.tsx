@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { AppRole, DEPARTMENTS, type Department } from '@/types/classroom';
 import { toast } from 'sonner';
-import { GraduationCap, Users, Loader2, Building2 } from 'lucide-react';
+import { GraduationCap, Users, Loader2, Building2, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   Select,
@@ -53,7 +53,7 @@ const RoleSelection: React.FC = () => {
       toast.error('Failed to set role. Please try again.');
       setLoading(null);
     } else {
-      toast.success(`Welcome${selectedRole === 'teacher' ? ', Teacher' : ''}!`);
+      toast.success(`Welcome${selectedRole === 'staff' ? ', Staff' : selectedRole === 'hod' ? ', HOD' : ''}!`);
       navigate('/dashboard');
     }
   };
@@ -86,10 +86,10 @@ const RoleSelection: React.FC = () => {
 
         {step === 'role' ? (
           /* Role Cards */
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-3 gap-6">
             {/* Teacher Card */}
             <button
-              onClick={() => handleRoleSelect('teacher')}
+              onClick={() => handleRoleSelect('staff')}
               disabled={loading !== null}
               className="gc-card p-8 text-left hover:shadow-gc-3 transition-all group disabled:opacity-60"
             >
@@ -101,6 +101,23 @@ const RoleSelection: React.FC = () => {
               </h2>
               <p className="text-sm text-on-surface-variant leading-relaxed">
                 Create and manage classes, post announcements, create assignments, and grade student work.
+              </p>
+            </button>
+
+            {/* HOD Card */}
+            <button
+              onClick={() => handleRoleSelect('hod')}
+              disabled={loading !== null}
+              className="gc-card p-8 text-left hover:shadow-gc-3 transition-all group disabled:opacity-60"
+            >
+              <div className="w-16 h-16 rounded-full bg-gc-purple/10 flex items-center justify-center mb-6 group-hover:bg-gc-purple/20 transition-colors">
+                <Shield className="w-8 h-8 text-gc-purple" />
+              </div>
+              <h2 className="text-xl font-google-sans text-foreground mb-2">
+                I'm HOD
+              </h2>
+              <p className="text-sm text-on-surface-variant leading-relaxed">
+                View and manage staff, students, classes, and academic data across the department.
               </p>
             </button>
 
@@ -127,17 +144,19 @@ const RoleSelection: React.FC = () => {
             <div className="flex items-center gap-4 mb-6">
               <div className={cn(
                 "w-12 h-12 rounded-full flex items-center justify-center",
-                selectedRole === 'teacher' ? "bg-gc-green/10" : "bg-primary/10"
+                selectedRole === 'staff' ? "bg-gc-green/10" : selectedRole === 'hod' ? "bg-gc-purple/10" : "bg-primary/10"
               )}>
-                {selectedRole === 'teacher' ? (
+                {selectedRole === 'staff' ? (
                   <GraduationCap className="w-6 h-6 text-gc-green" />
+                ) : selectedRole === 'hod' ? (
+                  <Shield className="w-6 h-6 text-gc-purple" />
                 ) : (
                   <Users className="w-6 h-6 text-primary" />
                 )}
               </div>
               <div>
                 <h3 className="font-google-sans text-lg text-foreground">
-                  {selectedRole === 'teacher' ? 'Staff Member' : 'Student'}
+                  {selectedRole === 'staff' ? 'Staff Member' : selectedRole === 'hod' ? 'HOD' : 'Student'}
                 </h3>
                 <p className="text-sm text-on-surface-variant">Select your department</p>
               </div>
@@ -171,7 +190,7 @@ const RoleSelection: React.FC = () => {
                   disabled={loading !== null || !department}
                   className={cn(
                     "flex-1 h-12 rounded-lg font-medium text-white transition-all",
-                    selectedRole === 'teacher' 
+                    selectedRole === 'staff' || selectedRole === 'hod'
                       ? "bg-gc-green hover:bg-gc-green/90" 
                       : "bg-primary hover:bg-primary/90",
                     (!department || loading) && "opacity-50 cursor-not-allowed"

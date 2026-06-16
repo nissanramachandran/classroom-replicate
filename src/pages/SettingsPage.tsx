@@ -66,7 +66,7 @@ const SettingsPage: React.FC = () => {
                 <p className="text-on-surface-variant">{profile.email}</p>
                 <div className="mt-2">
                   <span className="gc-chip gc-chip-primary">
-                    {profile.role === 'teacher' ? 'Teacher' : 'Student'}
+                    {profile.role === 'hod' ? 'HOD' : profile.role === 'staff' ? 'Staff' : 'Student'}
                   </span>
                 </div>
               </div>
