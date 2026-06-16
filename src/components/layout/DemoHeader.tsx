@@ -25,7 +25,8 @@ const DemoHeader: React.FC<DemoHeaderProps> = ({ onMenuClick, onCreateClick, onJ
   const { theme, toggleTheme } = useTheme();
   const { signOut } = useAuth();
   const [profile, setProfile] = React.useState(getDemoUser());
-  const isTeacher = profile.role === 'teacher';
+  const isTeacher = profile.role === 'staff' || profile.role === 'hod';
+  const roleLabel = profile.role === 'hod' ? 'HOD' : isTeacher ? 'Staff' : 'Student';
 
   const handleLogout = async () => {
     await signOut();
@@ -39,10 +40,10 @@ const DemoHeader: React.FC<DemoHeaderProps> = ({ onMenuClick, onCreateClick, onJ
   };
 
   const handleRoleSwitch = () => {
-    const newRole = profile.role === 'teacher' ? 'student' : 'teacher';
-    setDemoUserRole(newRole as 'teacher' | 'student', profile.department);
+    const newRole = isTeacher ? 'student' : 'staff';
+    setDemoUserRole(newRole, profile.department);
     setProfile(getDemoUser());
-    toast.success(`Switched to ${newRole === 'teacher' ? 'Staff' : 'Student'} view`);
+    toast.success(`Switched to ${newRole === 'staff' ? 'Staff' : 'Student'} view`);
     // Force refresh to update all components
     window.location.reload();
   };
@@ -142,7 +143,7 @@ const DemoHeader: React.FC<DemoHeaderProps> = ({ onMenuClick, onCreateClick, onJ
               </div>
               <div className="mt-2 flex flex-wrap gap-2">
                 <span className={`gc-chip ${isTeacher ? 'bg-gc-green/10 text-gc-green' : 'gc-chip-primary'}`}>
-                  {isTeacher ? 'Staff' : 'Student'}
+                  {roleLabel}
                 </span>
                 <span className="gc-chip bg-muted text-muted-foreground">
                   {profile.department}

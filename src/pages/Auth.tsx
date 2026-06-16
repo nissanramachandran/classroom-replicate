@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { Loader2, Mail, Lock, User, Eye, EyeOff, GraduationCap, Users, Building2 } from 'lucide-react';
-import { DEPARTMENTS, type Department } from '@/types/classroom';
+import { DEPARTMENTS, type AppRole, type Department } from '@/types/classroom';
 import { cn } from '@/lib/utils';
 import {
   Select,
@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-type LoginMode = 'staff' | 'student';
+type LoginMode = 'staff' | 'student' | 'hod';
 type AuthMode = 'login' | 'signup';
 
 const Auth: React.FC = () => {
@@ -60,9 +60,13 @@ const Auth: React.FC = () => {
     setLoading(true);
 
     try {
-      const emailToUse = loginMode === 'staff' 
-        ? (staffId.includes('@') ? staffId : `${staffId}@staff.edu`)
-        : `${registerNumber}@student.edu`;
+      const roleToUse: AppRole = loginMode;
+      const idValue = loginMode === 'student' ? registerNumber : staffId;
+      const emailToUse = idValue.includes('@')
+        ? idValue
+        : loginMode === 'student'
+          ? `${idValue}@student.edu`
+          : `${idValue}@staff.edu`;
 
       if (authMode === 'login') {
         const { error } = await signIn(email || emailToUse, password);
@@ -77,7 +81,7 @@ const Auth: React.FC = () => {
           setLoading(false);
           return;
         }
-        const { error } = await signUp(email, password, fullName);
+        const { error } = await signUp(email || emailToUse, password, fullName, roleToUse, department || undefined);
         if (error) {
           if (error.message.includes('already registered')) {
             toast.error('This email is already registered. Please sign in.');
