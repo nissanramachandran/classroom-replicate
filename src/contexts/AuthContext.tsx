@@ -135,8 +135,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const { error: profileError } = await supabase
       .from('profiles')
-      .update(updateData)
-      .eq('user_id', user.id);
+      .upsert({
+        id: user.id,
+        user_id: user.id,
+        email: user.email || '',
+        full_name: user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || null,
+        ...updateData,
+      }, { onConflict: 'user_id' });
 
     if (profileError) return { error: profileError as Error };
 
