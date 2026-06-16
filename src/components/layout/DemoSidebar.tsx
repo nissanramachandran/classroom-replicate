@@ -16,7 +16,7 @@ const DemoSidebar: React.FC<DemoSidebarProps> = ({ isOpen, onClose, classes }) =
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
   const profile = getDemoUser();
-  const isTeacher = profile.role === 'teacher';
+  const isTeacher = profile.role === 'staff' || profile.role === 'hod';
 
   const navItems = [
     { icon: Home, label: 'Classes', path: '/dashboard' },

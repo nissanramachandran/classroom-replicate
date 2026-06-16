@@ -13,7 +13,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireRole }
   const { user, profile, loading } = useAuth();
   const location = useLocation();
 
-  if (loading) {
+  if (loading || (user && !profile)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-surface-container">
         <div className="flex flex-col items-center gap-4">
