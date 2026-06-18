@@ -112,14 +112,11 @@ const Index: React.FC = () => {
               <div className="p-6 sm:p-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {/* Mock class cards */}
-                  {[
-                    { title: 'Mathematics 101', section: 'Section A', color: '#1967d2' },
-                    { title: 'English Literature', section: 'Advanced', color: '#129eaf' },
-                    { title: 'Physics', section: 'Section C', color: '#e8710a' },
-                  ].map((cls, idx) => (
+                  {cards.map((cls, idx) => (
                     <div 
                       key={idx}
-                      className="rounded-lg overflow-hidden border border-border shadow-sm"
+                      className="rounded-lg overflow-hidden border border-border shadow-sm hover-scale animate-fade-in"
+                      style={{ animationDelay: `${idx * 120}ms`, animationFillMode: 'both' }}
                     >
                       <div 
                         className="h-20 p-4 relative"
