@@ -44,6 +44,12 @@ const features = [
   },
 ];
 
+const cards = [
+  { title: 'Mathematics 101', section: 'Section A', color: '#1967d2' },
+  { title: 'English Literature', section: 'Advanced', color: '#129eaf' },
+  { title: 'Physics', section: 'Section C', color: '#e8710a' },
+];
+
 const Index: React.FC = () => {
   const navigate = useNavigate();
 
@@ -77,7 +83,7 @@ const Index: React.FC = () => {
       {/* Hero Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary/5 via-background to-primary/10">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-4xl mx-auto">
+          <div className="text-center max-w-4xl mx-auto animate-fade-in">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-google-sans font-medium text-foreground mb-6">
               Where teaching and learning{' '}
               <span className="text-primary">come together</span>
@@ -89,7 +95,7 @@ const Index: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 onClick={() => navigate('/dashboard')}
-                className="gc-btn-primary px-8 py-6 text-lg"
+                className="gc-btn-primary px-8 py-6 text-lg hover-scale"
                 size="lg"
               >
                 <Users className="w-5 h-5 mr-2" />
@@ -97,7 +103,7 @@ const Index: React.FC = () => {
               </Button>
               <Button 
                 variant="outline"
-                className="px-8 py-6 text-lg border-primary text-primary hover:bg-primary/10"
+                className="px-8 py-6 text-lg border-primary text-primary hover:bg-primary/10 hover-scale"
                 size="lg"
               >
                 Learn more
@@ -112,14 +118,11 @@ const Index: React.FC = () => {
               <div className="p-6 sm:p-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {/* Mock class cards */}
-                  {[
-                    { title: 'Mathematics 101', section: 'Section A', color: '#1967d2' },
-                    { title: 'English Literature', section: 'Advanced', color: '#129eaf' },
-                    { title: 'Physics', section: 'Section C', color: '#e8710a' },
-                  ].map((cls, idx) => (
+                  {cards.map((cls, idx) => (
                     <div 
                       key={idx}
-                      className="rounded-lg overflow-hidden border border-border shadow-sm"
+                      className="rounded-lg overflow-hidden border border-border shadow-sm hover-scale animate-fade-in"
+                      style={{ animationDelay: `${idx * 120}ms`, animationFillMode: 'both' }}
                     >
                       <div 
                         className="h-20 p-4 relative"
@@ -155,7 +158,8 @@ const Index: React.FC = () => {
             {features.map((feature, idx) => (
               <div 
                 key={idx}
-                className="gc-card p-6 hover:shadow-gc-2 transition-shadow"
+                className="gc-card p-6 hover:shadow-gc-2 hover-scale transition-all duration-300 animate-fade-in"
+                style={{ animationDelay: `${idx * 80}ms`, animationFillMode: 'both' }}
               >
                 <div 
                   className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4"
