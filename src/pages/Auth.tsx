@@ -81,16 +81,23 @@ const Auth: React.FC = () => {
           setLoading(false);
           return;
         }
-        const { error } = await signUp(email || emailToUse, password, fullName, roleToUse, department || undefined);
+        const { error, hasSession } = await signUp(email || emailToUse, password, fullName, roleToUse, department || undefined);
         if (error) {
-          if (error.message.includes('already registered')) {
+          if (error.message.includes('already registered') || error.message.includes('already been registered')) {
             toast.error('This email is already registered. Please sign in.');
           } else {
             toast.error(error.message);
           }
           triggerShakeError();
+        } else if (hasSession) {
+          // Email confirmation disabled — user is logged in, redirect handled by useEffect
+          toast.success('Account created! Redirecting…');
         } else {
-          toast.success('Check your email to confirm your account!');
+          // Email confirmation still enabled in Supabase — no session was returned
+          toast.error(
+            'Signup created but no active session. Please disable "Confirm email" in Supabase → Authentication → Providers → Email.',
+            { duration: 8000 }
+          );
         }
       }
     } catch (err) {
