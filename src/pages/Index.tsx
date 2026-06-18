@@ -44,6 +44,12 @@ const features = [
   },
 ];
 
+const cards = [
+  { title: 'Mathematics 101', section: 'Section A', color: '#1967d2' },
+  { title: 'English Literature', section: 'Advanced', color: '#129eaf' },
+  { title: 'Physics', section: 'Section C', color: '#e8710a' },
+];
+
 const Index: React.FC = () => {
   const navigate = useNavigate();
 
