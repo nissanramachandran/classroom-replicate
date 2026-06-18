@@ -158,7 +158,8 @@ const Index: React.FC = () => {
             {features.map((feature, idx) => (
               <div 
                 key={idx}
-                className="gc-card p-6 hover:shadow-gc-2 transition-shadow"
+                className="gc-card p-6 hover:shadow-gc-2 hover-scale transition-all duration-300 animate-fade-in"
+                style={{ animationDelay: `${idx * 80}ms`, animationFillMode: 'both' }}
               >
                 <div 
                   className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4"
