@@ -13,7 +13,7 @@ interface AuthContextType {
   isStudent: boolean;
   isHod: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signUp: (email: string, password: string, fullName: string, role?: AppRole, department?: Department) => Promise<{ error: Error | null }>;
+  signUp: (email: string, password: string, fullName: string, role?: AppRole, department?: Department) => Promise<{ error: Error | null; hasSession: boolean }>;
   signInWithGoogle: () => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   setUserRole: (role: AppRole, department?: Department) => Promise<{ error: Error | null }>;
