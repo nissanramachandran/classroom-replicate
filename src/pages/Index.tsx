@@ -77,7 +77,7 @@ const Index: React.FC = () => {
       {/* Hero Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary/5 via-background to-primary/10">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-4xl mx-auto">
+          <div className="text-center max-w-4xl mx-auto animate-fade-in">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-google-sans font-medium text-foreground mb-6">
               Where teaching and learning{' '}
               <span className="text-primary">come together</span>
@@ -89,7 +89,7 @@ const Index: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 onClick={() => navigate('/dashboard')}
-                className="gc-btn-primary px-8 py-6 text-lg"
+                className="gc-btn-primary px-8 py-6 text-lg hover-scale"
                 size="lg"
               >
                 <Users className="w-5 h-5 mr-2" />
@@ -97,7 +97,7 @@ const Index: React.FC = () => {
               </Button>
               <Button 
                 variant="outline"
-                className="px-8 py-6 text-lg border-primary text-primary hover:bg-primary/10"
+                className="px-8 py-6 text-lg border-primary text-primary hover:bg-primary/10 hover-scale"
                 size="lg"
               >
                 Learn more
