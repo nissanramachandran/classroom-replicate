@@ -8,8 +8,8 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-// Latest stable Gemini fast model.
-const GEMINI_MODEL = "gemini-2.5-flash";
+// Latest stable Gemini fast model (alias tracks the current stable release).
+const GEMINI_MODEL = "gemini-flash-latest";
 
 type Mode =
   // student
