@@ -8,8 +8,8 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-// Current stable Gemini model.
-const GEMINI_MODEL = "gemini-2.0-flash";
+// Current stable Gemini model (override via GEMINI_MODEL env var if desired).
+const GEMINI_MODEL = Deno.env.get("GEMINI_MODEL") || "gemini-2.5-flash-lite";
 
 type Mode =
   // student
