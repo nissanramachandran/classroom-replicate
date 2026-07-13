@@ -9,7 +9,7 @@ const corsHeaders = {
 };
 
 // Current stable Gemini model (override via GEMINI_MODEL env var if desired).
-const GEMINI_MODEL = Deno.env.get("GEMINI_MODEL") || "gemini-2.5-flash-lite";
+const GEMINI_MODEL = Deno.env.get("GEMINI_MODEL") || "gemini-flash-lite-latest";
 
 type Mode =
   // student
