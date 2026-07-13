@@ -60,7 +60,7 @@ const AIDoubtSolver: React.FC<AIDoubtSolverProps> = ({ isOpen, onClose, classTit
     try {
       await streamAIChat({
         messages: [...messages, userMsg],
-        mode: 'doubt',
+        mode,
         subject,
         classTitle,
         onDelta: upsertAssistant,
