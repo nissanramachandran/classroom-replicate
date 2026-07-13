@@ -1,7 +1,7 @@
 // AI Doubt Solver - Chat component for students to ask subject doubts
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Send, Trash2, Copy, Check, X, Sparkles, Loader2 } from 'lucide-react';
-import { streamAIChat } from '@/lib/aiChat';
+import { streamAIChat, type AIMode } from '@/lib/aiChat';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
