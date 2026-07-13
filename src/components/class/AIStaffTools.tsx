@@ -1,7 +1,7 @@
 // AI Staff Tools - Panel for teachers to generate assignments, quizzes, notes, announcements
 import React, { useState } from 'react';
-import { Sparkles, FileText, HelpCircle, BookOpen, Megaphone, X, Copy, Check, Loader2 } from 'lucide-react';
-import { streamAIChat } from '@/lib/aiChat';
+import { Sparkles, FileText, HelpCircle, BookOpen, Megaphone, X, Copy, Check, Loader2, ClipboardList, KeyRound, GraduationCap } from 'lucide-react';
+import { streamAIChat, type AIMode } from '@/lib/aiChat';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -12,13 +12,24 @@ interface AIStaffToolsProps {
   subject: string;
 }
 
-type ToolMode = 'generate_assignment' | 'generate_quiz' | 'generate_notes' | 'generate_announcement';
+type ToolMode = Extract<AIMode,
+  | 'generate_assignment'
+  | 'generate_quiz'
+  | 'generate_notes'
+  | 'generate_announcement'
+  | 'generate_question_paper'
+  | 'generate_answer_key'
+  | 'evaluation_suggestions'
+>;
 
 const tools: { mode: ToolMode; label: string; icon: React.ElementType; description: string }[] = [
-  { mode: 'generate_assignment', label: 'Generate Assignment', icon: FileText, description: 'Create a detailed assignment with instructions' },
-  { mode: 'generate_quiz', label: 'Generate Quiz', icon: HelpCircle, description: 'Create quiz with multiple choice questions' },
-  { mode: 'generate_notes', label: 'Generate Notes', icon: BookOpen, description: 'Create structured study notes summary' },
-  { mode: 'generate_announcement', label: 'Generate Announcement', icon: Megaphone, description: 'Draft a professional class announcement' },
+  { mode: 'generate_assignment', label: 'Assignment Generator', icon: FileText, description: 'Create a detailed assignment with instructions' },
+  { mode: 'generate_quiz', label: 'Quiz Generator', icon: HelpCircle, description: 'Multiple-choice quiz with answers' },
+  { mode: 'generate_question_paper', label: 'Question Paper', icon: ClipboardList, description: 'Full exam paper with sections & marks' },
+  { mode: 'generate_answer_key', label: 'Answer Key', icon: KeyRound, description: 'Model answers & marking scheme' },
+  { mode: 'evaluation_suggestions', label: 'Evaluation Suggestions', icon: GraduationCap, description: 'Grade & feedback for a student answer' },
+  { mode: 'generate_notes', label: 'Notes Generator', icon: BookOpen, description: 'Structured study notes summary' },
+  { mode: 'generate_announcement', label: 'Announcement', icon: Megaphone, description: 'Draft a professional class announcement' },
 ];
 
 const AIStaffTools: React.FC<AIStaffToolsProps> = ({ isOpen, onClose, classTitle, subject }) => {

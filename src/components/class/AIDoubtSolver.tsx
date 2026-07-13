@@ -1,7 +1,7 @@
 // AI Doubt Solver - Chat component for students to ask subject doubts
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Send, Trash2, Copy, Check, X, Sparkles, Loader2 } from 'lucide-react';
-import { streamAIChat } from '@/lib/aiChat';
+import { streamAIChat, type AIMode } from '@/lib/aiChat';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -19,7 +19,19 @@ const AIDoubtSolver: React.FC<AIDoubtSolverProps> = ({ isOpen, onClose, classTit
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+  const [mode, setMode] = useState<AIMode>('doubt');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const MODES: { value: AIMode; label: string }[] = [
+    { value: 'doubt', label: 'Ask AI' },
+    { value: 'explain', label: 'Explain' },
+    { value: 'tamil', label: 'Tamil' },
+    { value: 'tanglish', label: 'Tanglish' },
+    { value: 'summarize_notes', label: 'Summarize' },
+    { value: 'important_questions', label: 'Important Qs' },
+    { value: 'viva', label: 'Viva' },
+    { value: 'study_planner', label: 'Study Plan' },
+  ];
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -48,7 +60,7 @@ const AIDoubtSolver: React.FC<AIDoubtSolverProps> = ({ isOpen, onClose, classTit
     try {
       await streamAIChat({
         messages: [...messages, userMsg],
-        mode: 'doubt',
+        mode,
         subject,
         classTitle,
         onDelta: upsertAssistant,
@@ -100,6 +112,24 @@ const AIDoubtSolver: React.FC<AIDoubtSolverProps> = ({ isOpen, onClose, classTit
               <X className="w-5 h-5 text-on-surface-variant" />
             </button>
           </div>
+        </div>
+
+        {/* Mode chips */}
+        <div className="flex gap-1.5 overflow-x-auto px-4 py-2 border-b border-border bg-background/50">
+          {MODES.map(m => (
+            <button
+              key={m.value}
+              onClick={() => setMode(m.value)}
+              className={cn(
+                "shrink-0 text-xs px-3 py-1.5 rounded-full border transition-colors",
+                mode === m.value
+                  ? "bg-primary text-white border-primary"
+                  : "bg-transparent text-on-surface-variant border-border hover:bg-surface-variant"
+              )}
+            >
+              {m.label}
+            </button>
+          ))}
         </div>
 
         {/* Messages */}
