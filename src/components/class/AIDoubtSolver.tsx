@@ -19,7 +19,19 @@ const AIDoubtSolver: React.FC<AIDoubtSolverProps> = ({ isOpen, onClose, classTit
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+  const [mode, setMode] = useState<AIMode>('doubt');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const MODES: { value: AIMode; label: string }[] = [
+    { value: 'doubt', label: 'Ask AI' },
+    { value: 'explain', label: 'Explain' },
+    { value: 'tamil', label: 'Tamil' },
+    { value: 'tanglish', label: 'Tanglish' },
+    { value: 'summarize_notes', label: 'Summarize' },
+    { value: 'important_questions', label: 'Important Qs' },
+    { value: 'viva', label: 'Viva' },
+    { value: 'study_planner', label: 'Study Plan' },
+  ];
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
