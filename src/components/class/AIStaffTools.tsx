@@ -12,15 +12,14 @@ interface AIStaffToolsProps {
   subject: string;
 }
 
-type ToolMode = Extract<AIMode,
+type ToolMode =
   | 'generate_assignment'
   | 'generate_quiz'
   | 'generate_notes'
   | 'generate_announcement'
   | 'generate_question_paper'
   | 'generate_answer_key'
-  | 'evaluation_suggestions'
->;
+  | 'evaluation_suggestions';
 
 const tools: { mode: ToolMode; label: string; icon: React.ElementType; description: string }[] = [
   { mode: 'generate_assignment', label: 'Assignment Generator', icon: FileText, description: 'Create a detailed assignment with instructions' },

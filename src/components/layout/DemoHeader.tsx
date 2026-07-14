@@ -16,8 +16,8 @@ import {
 
 interface DemoHeaderProps {
   onMenuClick: () => void;
-  onCreateClick: () => void;
-  onJoinClick: () => void;
+  onCreateClick?: () => void;
+  onJoinClick?: () => void;
 }
 
 const DemoHeader: React.FC<DemoHeaderProps> = ({ onMenuClick, onCreateClick, onJoinClick }) => {
