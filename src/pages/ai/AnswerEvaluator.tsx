@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 
 async function extractText(file: File): Promise<string> {
   if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
-    const pdfjs: any = await import('pdfjs-dist/build/pdf');
+    const pdfjs: any = await import('pdfjs-dist');
     // @ts-ignore
     pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
     const buf = await file.arrayBuffer();

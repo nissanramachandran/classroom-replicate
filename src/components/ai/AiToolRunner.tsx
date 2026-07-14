@@ -26,7 +26,7 @@ const AiToolRunner: React.FC<Props> = ({ tool }) => {
     try {
       if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
         // Dynamic import so bundle stays lean
-        const pdfjs: any = await import('pdfjs-dist/build/pdf');
+        const pdfjs: any = await import('pdfjs-dist');
         // @ts-ignore
         pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
         const buf = await file.arrayBuffer();
