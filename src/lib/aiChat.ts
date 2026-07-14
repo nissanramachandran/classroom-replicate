@@ -4,22 +4,7 @@ type Msg = { role: "user" | "assistant"; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
 
-export type AIMode =
-  | "doubt"
-  | "explain"
-  | "tamil"
-  | "tanglish"
-  | "summarize_notes"
-  | "important_questions"
-  | "viva"
-  | "study_planner"
-  | "generate_quiz"
-  | "generate_assignment"
-  | "generate_question_paper"
-  | "generate_answer_key"
-  | "evaluation_suggestions"
-  | "generate_notes"
-  | "generate_announcement";
+export type AIMode = string;
 
 export interface AIChatOptions {
   messages: Msg[];
