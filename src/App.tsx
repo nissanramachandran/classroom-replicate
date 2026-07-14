@@ -20,6 +20,9 @@ import ProfilePage from "./pages/ProfilePage";
 import Auth from "./pages/Auth";
 import RoleSelection from "./pages/RoleSelection";
 import ClassPage from "./pages/ClassPage";
+import AiCenter from "./pages/ai/AiCenter";
+import AiToolPage from "./pages/ai/AiToolPage";
+import AnswerEvaluator from "./pages/ai/AnswerEvaluator";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +48,12 @@ const App = () => (
                 <Route path="/settings" element={<RequireAuth><SettingsPage /></RequireAuth>} />
                 <Route path="/archived" element={<RequireAuth><ArchivedPage /></RequireAuth>} />
                 <Route path="/profile" element={<RequireAuth><ProfilePage /></RequireAuth>} />
+
+                {/* AI Center */}
+                <Route path="/ai" element={<RequireAuth><AiCenter /></RequireAuth>} />
+                <Route path="/ai/answer-evaluator" element={<RequireAuth><AnswerEvaluator /></RequireAuth>} />
+                <Route path="/ai/:toolId" element={<RequireAuth><AiToolPage /></RequireAuth>} />
+
                 
                 {/* Auth routes */}
                 <Route path="/auth" element={<Auth />} />
