@@ -23,6 +23,8 @@ import ClassPage from "./pages/ClassPage";
 import AiCenter from "./pages/ai/AiCenter";
 import AiToolPage from "./pages/ai/AiToolPage";
 import AnswerEvaluator from "./pages/ai/AnswerEvaluator";
+import ChatPage from "./pages/ChatPage";
+import HodDashboard from "./pages/HodDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,6 +50,8 @@ const App = () => (
                 <Route path="/settings" element={<RequireAuth><SettingsPage /></RequireAuth>} />
                 <Route path="/archived" element={<RequireAuth><ArchivedPage /></RequireAuth>} />
                 <Route path="/profile" element={<RequireAuth><ProfilePage /></RequireAuth>} />
+                <Route path="/chat" element={<RequireAuth><ChatPage /></RequireAuth>} />
+                <Route path="/hod" element={<RequireAuth><HodDashboard /></RequireAuth>} />
 
                 {/* AI Center */}
                 <Route path="/ai" element={<RequireAuth><AiCenter /></RequireAuth>} />
