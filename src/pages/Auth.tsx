@@ -35,12 +35,18 @@ const Auth: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Redirect if already logged in — go straight to dashboard
+  // Redirect after login based on role: HOD → /hod, others → /dashboard.
+  // Waits for profile so role is known before routing.
   useEffect(() => {
-    if (user) {
-      const from = (location.state as any)?.from?.pathname || '/dashboard';
+    if (!user) return;
+    const from = (location.state as any)?.from?.pathname;
+    if (from) {
       navigate(from, { replace: true });
+      return;
     }
+    if (profile === null) return; // still loading
+    const target = profile?.role === 'hod' ? '/hod' : '/dashboard';
+    navigate(target, { replace: true });
   }, [user, profile, navigate, location]);
 
   const triggerShakeError = () => {
