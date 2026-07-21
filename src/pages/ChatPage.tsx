@@ -272,7 +272,7 @@ const ChatPage: React.FC = () => {
         </aside>
 
         {/* Conversation */}
-        <section className="flex-1 flex flex-col hidden sm:flex">
+        <section className="flex-1 flex-col hidden sm:flex">
           {!activeContact ? (
             <div className="flex-1 flex items-center justify-center text-on-surface-variant">
               Select a person to start chatting
